@@ -38,7 +38,8 @@ describe('GET /companies/:code', () => {
         expect(res.statusCode).toBe(200);
         expect(res.body).toEqual({ company: testCompany });
     });
-    test('Gets a single company (with invoice)', async () => {
+    test('Gets a single company (w/ invoice)', async () => {
+        // Add an invoice in.
         const invoiceResult = await db.query(
             `INSERT INTO invoices (comp_code, amt, paid) VALUES ('yahoo', 400, True) RETURNING id, comp_code, amt, paid, add_date, paid_date`
         );
@@ -46,6 +47,8 @@ describe('GET /companies/:code', () => {
         testCompany.invoices = [expect.any(Number)];
         expect(res.statusCode).toBe(200);
         expect(res.body).toEqual({ company: testCompany });
+
+        await db.query(`DELETE FROM invoices`);
     });
     test('Responds with 404 for invalid code', async () => {
         const res = await request(app).get(`/companies/akjshdf`);
