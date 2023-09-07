@@ -59,14 +59,13 @@ describe('GET /companies/:code', () => {
 describe('POST /companies', () => {
     test('Creates a single company', async () => {
         const res = await request(app).post('/companies').send({
-            code: 'ign',
             name: 'IGN Gaming',
             description: 'A website.',
         });
         expect(res.statusCode).toBe(201);
         expect(res.body).toEqual({
             company: {
-                code: 'ign',
+                code: 'ign-gaming',
                 name: 'IGN Gaming',
                 description: 'A website.',
             },
@@ -88,7 +87,7 @@ describe('PATCH /companies/:id', () => {
             },
         });
     });
-    test('Responds with 404 for invalid id', async () => {
+    test('Responds with 404 for invalid code', async () => {
         const res = await request(app)
             .patch(`/companies/fajskdfhj`)
             .send({ name: 'IGN Gaming', description: 'A website.' });
