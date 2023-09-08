@@ -54,5 +54,6 @@ INSERT INTO companies_industries (company_code, industry_code)
 VALUES
     ('ibm', 'tech'),
     ('apple', 'tech'),
+    ('apple', 'ent'),
     ('ramada', 'hosp'),
     ('fox', 'ent'); 
