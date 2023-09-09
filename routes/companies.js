@@ -39,7 +39,7 @@ router.get('/:code', async (req, res, next) => {
             [code]
         );
 
-        if (compResults.rows.length === 0) {
+        if (results.rows.length === 0) {
             throw new ExpressError(
                 `Can't find company with code of ${code}`,
                 404
