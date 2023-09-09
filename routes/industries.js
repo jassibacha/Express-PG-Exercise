@@ -15,7 +15,7 @@ router.get('/', async function (req, res, next) {
             LEFT JOIN companies_industries AS ci ON i.code = ci.industry_code
             GROUP BY i.code, i.industry
         `);
-        return res.json({ invoices: results.rows });
+        return res.json({ industries: results.rows });
     } catch (err) {
         return next(err);
     }
