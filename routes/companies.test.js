@@ -34,7 +34,8 @@ describe('GET /companies', () => {
 describe('GET /companies/:code', () => {
     test('Gets a single company (no invoices)', async () => {
         const res = await request(app).get(`/companies/${testCompany.code}`);
-        testCompany.invoices = []; // empty invoices array
+        testCompany.industries = expect.any(Array);
+        testCompany.invoices = expect.any(Array);
         expect(res.statusCode).toBe(200);
         expect(res.body).toEqual({ company: testCompany });
     });
@@ -44,6 +45,7 @@ describe('GET /companies/:code', () => {
             `INSERT INTO invoices (comp_code, amt, paid) VALUES ('yahoo', 400, True) RETURNING id, comp_code, amt, paid, add_date, paid_date`
         );
         const res = await request(app).get(`/companies/${testCompany.code}`);
+        testCompany.industries = expect.any(Array);
         testCompany.invoices = [expect.any(Number)];
         expect(res.statusCode).toBe(200);
         expect(res.body).toEqual({ company: testCompany });

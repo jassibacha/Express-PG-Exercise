@@ -85,11 +85,11 @@ describe('POST /invoices', () => {
     });
 });
 
-describe('PATCH /invoices/:id', () => {
-    test('Updates a single invoice', async () => {
+describe('PUT /invoices/:id', () => {
+    test('Updates a single invoice already paid', async () => {
         const res = await request(app)
-            .patch(`/invoices/${testInvoice.id}`)
-            .send({ amt: 750 });
+            .put(`/invoices/${testInvoice.id}`)
+            .send({ amt: 750, paid: true });
         expect(res.statusCode).toBe(200);
         expect(res.body).toEqual({
             invoice: {
@@ -99,12 +99,29 @@ describe('PATCH /invoices/:id', () => {
                 amt: 750,
                 paid: testInvoice.paid,
                 add_date: '2023-09-06T07:00:00.000Z',
-                paid_date: '2023-09-06T07:00:00.000Z',
+                paid_date: expect.any(String),
+            },
+        });
+    });
+    test('Updates a single invoice mark unpaid', async () => {
+        const res = await request(app)
+            .put(`/invoices/${testInvoice.id}`)
+            .send({ amt: 750, paid: false });
+        expect(res.statusCode).toBe(200);
+        expect(res.body).toEqual({
+            invoice: {
+                // id, comp_code, amt, paid, add_date, paid_date
+                id: expect.any(Number),
+                comp_code: testInvoice.comp_code,
+                amt: 750,
+                paid: false,
+                add_date: '2023-09-06T07:00:00.000Z',
+                paid_date: null,
             },
         });
     });
     test('Responds with 404 for invalid id', async () => {
-        const res = await request(app).patch(`/invoices/0`).send({ amt: 750 });
+        const res = await request(app).put(`/invoices/0`).send({ amt: 750 });
         expect(res.statusCode).toBe(404);
     });
 });
